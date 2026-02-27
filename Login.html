@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+</head>
+<body>
+  <h2>FlowTrack Login</h2>
+
+  <input type="email" id="email" placeholder="Email"><br><br>
+  <input type="password" id="password" placeholder="Password"><br><br>
+
+  <button onclick="handleLogin()">Login</button>
+
+  <p id="result"></p>
+
+  <script>
+    function handleLogin() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      google.script.run
+        .withSuccessHandler(res => {
+          if (res.success) {
+            document.getElementById("result").innerText = "Login successful!";
+          } else {
+            document.getElementById("result").innerText = res.message;
+          }
+        })
+        .withFailureHandler(err => {
+          document.getElementById("result").innerText = "Server error.";
+          console.error(err);
+        })
+        .login(email, password);
+    }
+  </script>
+</body>
+</html>
