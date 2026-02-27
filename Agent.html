@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <script>
+  const BASE_URL = "<?= baseUrl ?>";
+  const SESSION_ID = "<?= sessionId ?>";
+</script>
+</head>
+<body>
+
+  <h2>Agent Dashboard</h2>
+  <p id="welcome"></p>
+
+  <button onclick="logout()">Logout</button>
+
+  <script>
+const params = new URLSearchParams(window.location.search);
+  const SESSION_ID = params.get("sessionId");
+
+    window.onload = function () {
+      const name = sessionStorage.getItem("name") || "User";
+      document.getElementById("welcome").innerText =
+        "Welcome " + name;
+    };
+
+    function logout() {
+
+  if (!SESSION_ID) {
+    alert("Session missing.");
+    return;
+  }
+
+  google.script.run
+    .withSuccessHandler(() => {
+      top.location.href = BASE_URL;
+    })
+    .logout(SESSION_ID);
+}
+  </script>
+
+</body>
+</html>

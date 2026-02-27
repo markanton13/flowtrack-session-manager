@@ -2,6 +2,9 @@
 <html>
 <head>
   <base target="_top">
+  <script>
+  const BASE_URL = "<?= baseUrl ?>";
+</script>
 </head>
 <body>
   <h2>FlowTrack Login</h2>
@@ -13,25 +16,28 @@
 
   <p id="result"></p>
 
-  <script>
-    function handleLogin() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+ <script>
+function handleLogin() {
 
-      google.script.run
-        .withSuccessHandler(res => {
-          if (res.success) {
-            document.getElementById("result").innerText = "Login successful!";
-          } else {
-            document.getElementById("result").innerText = res.message;
-          }
-        })
-        .withFailureHandler(err => {
-          document.getElementById("result").innerText = "Server error.";
-          console.error(err);
-        })
-        .login(email, password);
-    }
-  </script>
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  google.script.run
+    .withSuccessHandler(res => {
+
+      if (res.success) {
+        top.location.href = BASE_URL + "?page=" + res.user.role + "&sessionId=" + res.sessionId;
+      } else {
+        document.getElementById("result").innerText = res.message;
+      }
+
+    })
+    .withFailureHandler(err => {
+      console.error(err);
+      alert("Login failed");
+    })
+    .login(email, password); // ✅ THIS LINE
+}
+</script>
 </body>
 </html>
